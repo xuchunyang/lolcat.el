@@ -1,5 +1,7 @@
 # Emacs Port of LOLcat
 
+[![Build Status](https://travis-ci.org/xuchunyang/lolcat.el.svg?branch=master)](https://travis-ci.org/xuchunyang/lolcat.el)
+
 The original [LOLcat](https://github.com/busyloop/lolcat) is written in Ruby, but this Emacs version is ported from the [Python version](https://github.com/tehmaze/lolcat).
 
 ## Screenshot
