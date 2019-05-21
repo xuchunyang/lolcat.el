@@ -52,8 +52,9 @@
 
 ;;;###autoload
 (defun lolcat-view-file (filename)
-  (interactive "fLOLcat View File: ")
-  (with-current-buffer (get-buffer-create "*Lolcat*")
+  (interactive "fFile: ")
+  (with-current-buffer (get-buffer-create
+                        (format "*Lolcat %s*" filename))
     (display-buffer (current-buffer))
     (erase-buffer)
     (insert
@@ -62,8 +63,21 @@
        (lolcat (buffer-string))))))
 
 ;;;###autoload
+(defun lolcat-view-buffer (buffer)
+  (interactive "bBuffer: ")
+  (with-current-buffer (get-buffer-create
+                        (format "*Lolcat %s*"
+                                (buffer-name (get-buffer buffer))))
+    (display-buffer (current-buffer))
+    (erase-buffer)
+    (insert
+     (lolcat
+      (with-current-buffer buffer
+        (buffer-substring-no-properties (point-min) (point-max)))))))
+
+;;;###autoload
 (defun lolcat-message (format-string &rest args)
-  (interactive (list "%s" (read-string "LOLcat message: ")))
+  (interactive (list "%s" (read-string "Message: ")))
   (message "%s" (lolcat (apply #'format format-string args))))
 
 ;;;###autoload
