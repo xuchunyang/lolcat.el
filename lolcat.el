@@ -46,12 +46,22 @@
            (cl-loop for char across line
                     for i from 0
                     for color = (lolcat--color freq (+ os (/ i spread)))
-                    concat (propertize (string char) 'face `(:foreground ,color)))
+                    concat (propertize (string char)
+                                       (if font-lock-mode 'font-lock-face 'face)
+                                       `(:foreground ,color)))
            into lines
            finally return (mapconcat #'identity lines "\n")))
 
 ;;;###autoload
+(defun lolcat-this-buffer (&optional buffer)
+  "Colorize the current buffer."
+  (interactive)
+  (with-current-buffer (or buffer (current-buffer))
+    (insert (lolcat (delete-and-extract-region (point-min) (point-max))))))
+
+;;;###autoload
 (defun lolcat-view-file (filename)
+  "View FILENAME with color."
   (interactive "fFile: ")
   (with-current-buffer (get-buffer-create
                         (format "*Lolcat %s*" filename))
@@ -60,10 +70,12 @@
     (insert
      (with-temp-buffer
        (insert-file-contents filename)
-       (lolcat (buffer-string))))))
+       (lolcat (buffer-string))))
+    (view-mode)))
 
 ;;;###autoload
 (defun lolcat-view-buffer (buffer)
+  "View BUFFER with color."
   (interactive "bBuffer: ")
   (with-current-buffer (get-buffer-create
                         (format "*Lolcat %s*"
@@ -73,16 +85,18 @@
     (insert
      (lolcat
       (with-current-buffer buffer
-        (buffer-substring-no-properties (point-min) (point-max)))))))
+        (buffer-substring-no-properties (point-min) (point-max)))))
+    (view-mode)))
 
 ;;;###autoload
 (defun lolcat-message (format-string &rest args)
+  "Like `message' with color."
   (interactive (list "%s" (read-string "Message: ")))
   (message "%s" (lolcat (apply #'format format-string args))))
 
 ;;;###autoload
 (defun eshell/lolcat (filename)
-  "Display contents of FILENAME in color."
+  "Display contents of FILENAME with color."
   (with-temp-buffer
     (insert-file-contents filename)
     (lolcat (buffer-string))))

@@ -20,6 +20,10 @@ View `FILE` in color.
 
 View `BUFFER` in color.
 
+### `M-x lolcat-this-buffer`
+
+Colorize the current buffer.
+
 ### `eshell/lolcat`
 
 The Eshell command.
