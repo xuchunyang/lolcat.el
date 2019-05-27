@@ -36,7 +36,11 @@
           (+ (* (sin (+ (* freq i) (/ (* 4 float-pi) 3))) 127) 128)))
 
 (defun lolcat (s &optional seed freq spread)
-  "Colorize S."
+  "Colorize S.
+
+If SEED is nil, a random seed will be used.
+If FREQ is nil, 0.1 will be used.
+If SPREAD is nil, 3.0 will be used."
   (setq seed (or seed (random 256))
         freq (or freq 0.1)
         spread (or spread 3.0))
@@ -54,7 +58,7 @@
 
 ;;;###autoload
 (defun lolcat-this-buffer (&optional buffer)
-  "Colorize the current buffer."
+  "Colorize BUFFER (defaults to the current buffer)."
   (interactive)
   (with-current-buffer (or buffer (current-buffer))
     (insert (lolcat (delete-and-extract-region (point-min) (point-max))))))
@@ -90,7 +94,9 @@
 
 ;;;###autoload
 (defun lolcat-message (format-string &rest args)
-  "Like `message' with color."
+  "Like `message' but with color.
+
+FORMAT-STRING and ARGS are used in the same way as `message'."
   (interactive (list "%s" (read-string "Message: ")))
   (message "%s" (lolcat (apply #'format format-string args))))
 
